@@ -6,7 +6,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -25,6 +27,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic();
 
         http.logout().logoutSuccessUrl("/");
+
+//        http.sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//                .sessionFixation()
+//                    .changeSessionId()
+//                .maximumSessions(1)
+//                    .expiredUrl("/");
+
+        http.exceptionHandling()
+                .accessDeniedHandler(new CustomAccessDeniedHandler());
+//                .accessDeniedPage("/access-denied");
 
         SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL); // 하위 쓰레드로 SecurityCentex 공유
     }
