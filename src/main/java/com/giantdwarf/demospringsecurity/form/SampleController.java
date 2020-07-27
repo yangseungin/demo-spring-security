@@ -4,6 +4,7 @@ import com.giantdwarf.demospringsecurity.account.Account;
 import com.giantdwarf.demospringsecurity.account.AccountContext;
 import com.giantdwarf.demospringsecurity.account.AccountRepository;
 import com.giantdwarf.demospringsecurity.account.UserAccount;
+import com.giantdwarf.demospringsecurity.book.BookRepository;
 import com.giantdwarf.demospringsecurity.common.CurrentUser;
 import com.giantdwarf.demospringsecurity.common.SecurityLogger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class SampleController {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    BookRepository bookRepository;
 
     @GetMapping("/")
     public String index(Model model, @CurrentUser Account account){
@@ -53,6 +57,13 @@ public class SampleController {
     public String admin(Model model, Principal principal){
         model.addAttribute("message","Hello admin "+principal.getName());
         return "admin";
+    }
+
+    @GetMapping("/user")
+    public String user(Model model, Principal principal){
+        model.addAttribute("message","Hello user "+principal.getName());
+        model.addAttribute("books",bookRepository.findCurrentUserBooks());
+        return "user";
     }
 
     @GetMapping("/async-handler")
