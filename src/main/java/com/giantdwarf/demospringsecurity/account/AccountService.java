@@ -25,11 +25,7 @@ public class AccountService implements UserDetailsService {
             throw new UsernameNotFoundException(username);
         }
 
-        return User.builder()
-                .username(byUsername.getUsername())
-                .password(byUsername.getPassword())
-                .roles(byUsername.getRole())
-                .build();
+        return new UserAccount(byUsername);
     }
 
     public Account createNew(Account account) {
